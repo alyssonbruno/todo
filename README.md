@@ -6,25 +6,41 @@ I recomend using asdf tool, see documentations for it see [asdf documentation](h
 
 ### Install Java (21)
 
+Add Java Plugin
 ```bash
 asdf plugin-add java
 ```
-Show all version for Java:
-```bash
-asdf list-all java
-```
-Choose one:
+
+
+Install java version.
 ```bash
 asdf install java openjdk-21
 ```
 
-### Optional (this directory alread has a asdf .tool-versions file)
+#### Optional
+
 Set this one for all system:
 ```bash
 asdf global java openjdk-21
 ```
-Or set only for this diretory (recomended):
 
+### Install Maven (3.9.9)
+
+Add Maven Plugin
 ```bash
-asdf local java openjdk-21
+asdf plugin-add maven
+```
+
+Install java version.
+```bash
+asdf install maven 3.9.9
+```
+
+
+#### Optional
+
+
+Set this one for all system:
+```bash
+asdf global maven 3.9.9
 ```
