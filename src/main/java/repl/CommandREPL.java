@@ -18,7 +18,9 @@ public class CommandREPL {
             Boolean repl = true;
 
             terminal.writer().println("Welcome to To-do Application");
-            terminal.writer().println("Enter help for assitence");
+            terminal
+                .writer()
+                .println("Enter help for assitence or quit to exit.");
             terminal.writer().flush();
             while (repl) {
                 String[] commandString = lineReader.readLine(">>> ").split(" ");
@@ -55,6 +57,7 @@ public class CommandREPL {
                             .println(
                                 "remove <strings> - delete a task (with task_id). Task_id is mandatory"
                             );
+                        terminal.writer().println("quit - exit from here");
                         break;
                     case "add":
                     case "append":
