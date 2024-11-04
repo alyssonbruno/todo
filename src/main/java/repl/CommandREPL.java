@@ -8,7 +8,7 @@ import org.jline.terminal.TerminalBuilder;
 
 public class CommandREPL {
 
-    public static void terminal_repl() {
+    public static Integer terminal_repl() {
         try {
             Terminal terminal = TerminalBuilder.builder().system(true).build();
             LineReader lineReader = LineReaderBuilder.builder()
@@ -86,8 +86,10 @@ public class CommandREPL {
                 }
                 terminal.writer().flush();
             }
+            return 0;
         } catch (Exception e) {
             e.printStackTrace();
+            return 1;
         }
     }
 }
