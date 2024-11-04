@@ -1,17 +1,15 @@
 package cli;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.concurrent.Callable;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 import picocli.CommandLine.Parameters;
 import repl.CommandREPL;
+import service.CodeAnaliseService;
+import service.SystemService;
 
 /**
  * Command is the main Class to terminal. This can call {@link repl.CommandREPL} when called without arguments.
@@ -40,56 +38,35 @@ public class CommandCLI implements Callable<Integer> {
 
     @Option(
         names = { "--file-format" },
-        description = "Should be text or code. Text (default) create a task for all full line, code create only lines with 'todo:'"
+        description = "Should be text or code. Text (default) create a task for all full line, code create only lines with tags"
     )
     String format = "text";
+
+    @Option(
+        names = { "--tags", "-t" },
+        description = "Use with --file-format=code, include tags separeted by coma (,), these tags need to have a : after it."
+    )
+    ArrayList<String> tags = new ArrayList<>();
 
     /*  todo: others options: add, list, start, complete, delete
         todo: how to make test
         todo: implements save do file database
     */
-    /** Receive a stream of information from PIPE then add one taks
-     *  for each line from it. If --file-format is text (default)
-     *  all line will be include, if is code only line with "todo:"
-     *  will be added.
-     * @author Alysson
-     * @version 2024-11
-     */
-    private void readFromPipe() {
-        try {
-            BufferedReader pipeReader;
-            String line;
 
-            if (file != null) {
-                pipeReader = Files.newBufferedReader(file.toPath());
-            } else {
-                pipeReader = new BufferedReader(
-                    new InputStreamReader(System.in)
-                );
-            }
-
-            while ((line = pipeReader.readLine()) != null) {
-                if (format.equals("code")) {
-                    if (line.contains("todo:")) {
-                        int index = line.indexOf("todo:");
-                        System.out.printf(
-                            "add %s\n",
-                            line.substring(index + 5)
-                        );
-                    }
-                } else {
-                    System.out.printf("add %s\n", line);
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+    public CommandCLI() {
+        if (tags.isEmpty()) {
+            tags.add("todo");
         }
     }
 
     @Override
     public Integer call() throws Exception {
-        if (isPipe || file != null) {
-            readFromPipe();
+        if (isPipe || (file != null)) {
+            CodeAnaliseService.fromBufferedReader(
+                SystemService.readFromFile(file),
+                format,
+                tags
+            );
             return 0;
         }
         return (CommandREPL.terminal_repl());
