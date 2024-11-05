@@ -24,9 +24,8 @@ public class CodeAnaliseService {
         String[] tags
     ) throws IOException {
         String line;
-        logger.log(Level.INFO, "tags: " + tags.toString());
         while ((line = reader.readLine()) != null) {
-            if (format.equals("code")) {
+            if (format != null && format.equals("code")) {
                 for (String tag : tags) {
                     if (line.contains(tag + ":")) {
                         int index = line.indexOf(tag + ":");

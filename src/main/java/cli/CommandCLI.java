@@ -1,9 +1,10 @@
 package cli;
 
+import domain.TaskStatus;
 import java.io.File;
-import java.util.ArrayList;
 import java.util.concurrent.Callable;
 import picocli.CommandLine;
+import picocli.CommandLine.ArgGroup;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 import picocli.CommandLine.Parameters;
@@ -24,48 +25,140 @@ import service.SystemService;
 )
 public class CommandCLI implements Callable<Integer> {
 
-    @Option(
-        names = { "-p", "--pipe" },
-        description = "a pipe will send to todo program"
-    )
-    Boolean isPipe = false;
+    @Parameters(index = "0..*", hidden = true)
+    String[] taskMessage;
 
-    @Option(
-        names = { "-f", "--file" },
-        description = "a file with tasks to add"
-    )
-    File file = null;
+    @ArgGroup(exclusive = true, multiplicity = "0..1")
+    InputStream inputFile;
 
-    @Option(
-        names = { "--file-format" },
-        defaultValue = "text",
-        description = "Should be text or code. Text (default) create a task for all full line, code create only lines with tags"
-    )
-    String format = "text";
+    @ArgGroup(exclusive = true, multiplicity = "0..1")
+    Operations op;
 
-    @Option(
-        names = { "--file-tags" },
-        defaultValue = "todo",
-        description = "Use with --file-format=code, include tags separeted by coma (,), these tags need to have a : after it."
-    )
-    String tags = "todo";
+    static class Operations {
 
-    /*  todo: others options: add, list, start, complete, delete
-        todo: how to make test
+        @Option(
+            names = { "-a", "--add" },
+            description = "add a new task",
+            required = true
+        )
+        String taskDescrition = null;
+
+        @Option(
+            names = { "-l", "--list" },
+            description = "list task",
+            defaultValue = "${TaskStatus.TODO}",
+            required = true
+        )
+        TaskStatus statusToList = null;
+
+        @Option(
+            names = { "-c", "--complete" },
+            description = "Chage a Task to DONE",
+            required = true
+        )
+        Long completeTaskId = null;
+
+        @Option(
+            names = { "-s", "--start" },
+            description = "Chage a Task to DOING",
+            required = true
+        )
+        Long startTaskId = null;
+
+        @Option(
+            names = { "-d", "--delete" },
+            description = "Delete a task",
+            required = true
+        )
+        Long deleteTaskId = null;
+    }
+
+    static class InputStream {
+
+        @Option(
+            names = { "-p", "--pipe" },
+            description = "a pipe will send to todo program",
+            required = true
+        )
+        Boolean isPipe = false;
+
+        @ArgGroup(exclusive = false, multiplicity = "0..1")
+        FileOperations fileOperations;
+    }
+
+    static class FileOperations {
+
+        @Option(
+            names = { "-f", "--file" },
+            description = "a file with tasks to add",
+            required = true
+        )
+        File file = null;
+
+        @ArgGroup(exclusive = false, multiplicity = "0..1")
+        OptionsFileConfigs configFile;
+    }
+
+    static class OptionsFileConfigs {
+
+        @Option(
+            names = { "--file-format" },
+            defaultValue = "text",
+            description = "Should be text or code. Text (default) create a task for all full line, code create only lines with tags",
+            required = true
+        )
+        String format = "text";
+
+        @Option(
+            names = { "--file-tags" },
+            defaultValue = "todo",
+            description = "Use with --file-format=code, include tags separeted by coma (,), these tags need to have a : after it.",
+            required = true
+        )
+        String tags = "todo";
+    }
+
+    /*
+        todo: how to make test?
         todo: implements save do file database
     */
 
     @Override
     public Integer call() throws Exception {
-        if (isPipe || (file != null)) {
-            CodeAnaliseService.fromBufferedReader(
-                SystemService.readFromFile(file),
-                format,
-                tags.split(",")
-            );
-            return 0;
+        if (inputFile != null) {
+            if (inputFile.isPipe) {
+                CodeAnaliseService.fromBufferedReader(
+                    SystemService.readFromFile(null),
+                    null,
+                    null
+                );
+            } else if (
+                inputFile.fileOperations != null &&
+                inputFile.fileOperations.file != null
+            ) {
+                CodeAnaliseService.fromBufferedReader(
+                    SystemService.readFromFile(inputFile.fileOperations.file),
+                    inputFile.fileOperations.configFile.format,
+                    inputFile.fileOperations.configFile.tags.split(",")
+                );
+            } else {
+                throw new Exception("Invalid Operations");
+            }
+        } else if (op != null) {
+            if (
+                op.taskDescrition != null ||
+                op.completeTaskId != null ||
+                op.deleteTaskId != null ||
+                op.statusToList != null ||
+                op.startTaskId != null
+            ) {
+                System.out.println(String.join(" ", taskMessage));
+                System.out.println(op);
+            }
+        } else {
+            return (CommandREPL.terminal_repl());
         }
-        return (CommandREPL.terminal_repl());
+        return 0;
     }
 
     public static void main(String[] args) {
