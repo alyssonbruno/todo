@@ -37,13 +37,14 @@ public class CommandCLI implements Callable<Integer> {
     File file = null;
 
     @Option(
-        names = { "--file-format", "-r" },
+        names = { "--file-format" },
+        defaultValue = "text",
         description = "Should be text or code. Text (default) create a task for all full line, code create only lines with tags"
     )
     String format = "text";
 
     @Option(
-        names = { "--file-tags", "-t" },
+        names = { "--file-tags" },
         defaultValue = "todo",
         description = "Use with --file-format=code, include tags separeted by coma (,), these tags need to have a : after it."
     )
