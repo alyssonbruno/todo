@@ -2,11 +2,15 @@ package service;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.lang.System.Logger;
+import java.lang.System.Logger.Level;
 import java.util.ArrayList;
 import org.springframework.stereotype.Service;
 
 @Service
 public class CodeAnaliseService {
+
+    private static Logger logger = System.getLogger("TODO");
 
     /** Receive a stream of information from PIPE then add one taks
      *  for each line from it. If --file-format is text (default)
@@ -18,9 +22,10 @@ public class CodeAnaliseService {
     public static void fromBufferedReader(
         BufferedReader reader,
         String format,
-        ArrayList<String> tags
+        String[] tags
     ) throws IOException {
         String line;
+        logger.log(Level.INFO, "tags: " + tags.toString());
         while ((line = reader.readLine()) != null) {
             if (format.equals("code")) {
                 for (String tag : tags) {

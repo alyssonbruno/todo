@@ -37,27 +37,22 @@ public class CommandCLI implements Callable<Integer> {
     File file = null;
 
     @Option(
-        names = { "--file-format" },
+        names = { "--file-format", "-r" },
         description = "Should be text or code. Text (default) create a task for all full line, code create only lines with tags"
     )
     String format = "text";
 
     @Option(
-        names = { "--tags", "-t" },
+        names = { "--file-tags", "-t" },
+        defaultValue = "todo",
         description = "Use with --file-format=code, include tags separeted by coma (,), these tags need to have a : after it."
     )
-    ArrayList<String> tags = new ArrayList<>();
+    String tags = "todo";
 
     /*  todo: others options: add, list, start, complete, delete
         todo: how to make test
         todo: implements save do file database
     */
-
-    public CommandCLI() {
-        if (tags.isEmpty()) {
-            tags.add("todo");
-        }
-    }
 
     @Override
     public Integer call() throws Exception {
@@ -65,7 +60,7 @@ public class CommandCLI implements Callable<Integer> {
             CodeAnaliseService.fromBufferedReader(
                 SystemService.readFromFile(file),
                 format,
-                tags
+                tags.split(",")
             );
             return 0;
         }
