@@ -4,6 +4,7 @@ import domain.FileFormat;
 import domain.TaskStatus;
 import java.io.File;
 import java.util.concurrent.Callable;
+import org.springframework.boot.SpringApplication;
 import picocli.CommandLine;
 import picocli.CommandLine.ArgGroup;
 import picocli.CommandLine.Command;
@@ -12,6 +13,7 @@ import picocli.CommandLine.Parameters;
 import repl.CommandREPL;
 import service.CodeAnaliseService;
 import service.SystemService;
+import web.TodoWebApplication;
 
 /**
  * Command is the main Class to terminal. This can call {@link repl.CommandREPL} when called without arguments.
@@ -34,6 +36,13 @@ public class CommandCLI implements Callable<Integer> {
 
     @ArgGroup(exclusive = true, multiplicity = "0..1")
     Operations op;
+
+    @Option(
+        names = { "-w", "--web" },
+        defaultValue = "false",
+        description = "Start Webservice. Will ignore all others options"
+    )
+    Boolean startWeb = false;
 
     static class Operations {
 
@@ -123,9 +132,17 @@ public class CommandCLI implements Callable<Integer> {
         todo: how to make test?
         todo: implements save do file database
     */
+    private void startWebApp() {
+        SpringApplication.run(TodoWebApplication.class);
+    }
 
     @Override
     public Integer call() throws Exception {
+        if (startWeb) {
+            startWebApp();
+            return 0;
+        }
+
         if (inputFile != null) {
             if (inputFile.isPipe) {
                 CodeAnaliseService.fromBufferedReader(

@@ -1,15 +1,22 @@
 package domain;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import java.time.LocalDateTime;
 
 /** class to Task
  *  @author Alysson
  *  @version 2024.11
  */
-
+@Entity
 public class Task {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String about;
     private TaskStatus status;
     private LocalDateTime startTime;
@@ -21,6 +28,8 @@ public class Task {
             super(message);
         }
     }
+
+    protected Task() {}
 
     /** Create a new Task with TODO status
      *  @author Alysson
