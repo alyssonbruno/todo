@@ -1,15 +1,12 @@
 package service;
 
+import domain.FileFormat;
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.lang.System.Logger;
-import java.lang.System.Logger.Level;
 import org.springframework.stereotype.Service;
 
 @Service
 public class CodeAnaliseService {
-
-    private static Logger logger = System.getLogger("TODO");
 
     /** Receive a stream of information from PIPE then add one taks
      *  for each line from it. If --file-format is text (default)
@@ -20,12 +17,12 @@ public class CodeAnaliseService {
      */
     public static void fromBufferedReader(
         BufferedReader reader,
-        String format,
+        FileFormat format,
         String[] tags
     ) throws IOException {
         String line;
         while ((line = reader.readLine()) != null) {
-            if (format != null && format.equals("code")) {
+            if (format != null && format.equals(FileFormat.CODE)) {
                 for (String tag : tags) {
                     if (line.contains(tag + ":")) {
                         int index = line.indexOf(tag + ":");

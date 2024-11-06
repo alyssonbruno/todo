@@ -1,5 +1,6 @@
 package cli;
 
+import domain.FileFormat;
 import domain.TaskStatus;
 import java.io.File;
 import java.util.concurrent.Callable;
@@ -103,17 +104,17 @@ public class CommandCLI implements Callable<Integer> {
 
         @Option(
             names = { "--file-format" },
-            defaultValue = "text",
-            description = "Should be text or code. Text (default) create a task for all full line, code create only lines with tags",
-            required = true
+            defaultValue = "${FileFormat.TEXT}",
+            description = "Should be @|italic,bold TEXT|@ or @|italic,bold CODE|@. @|italic,bold TEXT|@ (default) create a task for all full line, @|italic,bold CODE|@ create only lines with tags",
+            required = false
         )
-        String format = "text";
+        FileFormat format = FileFormat.TEXT;
 
         @Option(
             names = { "--file-tags" },
             defaultValue = "todo",
-            description = "Use with --file-format=code, include tags separeted by coma (,), these tags need to have a : after it.",
-            required = true
+            description = "Use with @|italic,bold --file-format=|@@|italic,bold,fg(green) CODE|@, include tags separeted by coma (,), in the file these tags need to have a colon (:) after it.",
+            required = false
         )
         String tags = "todo";
     }
@@ -136,11 +137,23 @@ public class CommandCLI implements Callable<Integer> {
                 inputFile.fileOperations != null &&
                 inputFile.fileOperations.file != null
             ) {
-                CodeAnaliseService.fromBufferedReader(
-                    SystemService.readFromFile(inputFile.fileOperations.file),
-                    inputFile.fileOperations.configFile.format,
-                    inputFile.fileOperations.configFile.tags.split(",")
-                );
+                if (inputFile.fileOperations.configFile != null) {
+                    CodeAnaliseService.fromBufferedReader(
+                        SystemService.readFromFile(
+                            inputFile.fileOperations.file
+                        ),
+                        inputFile.fileOperations.configFile.format,
+                        inputFile.fileOperations.configFile.tags.split(",")
+                    );
+                } else {
+                    CodeAnaliseService.fromBufferedReader(
+                        SystemService.readFromFile(
+                            inputFile.fileOperations.file
+                        ),
+                        FileFormat.TEXT,
+                        null
+                    );
+                }
             } else {
                 throw new Exception("Invalid Operations");
             }
