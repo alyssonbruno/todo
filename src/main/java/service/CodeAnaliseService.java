@@ -24,8 +24,10 @@ public class CodeAnaliseService {
         while ((line = reader.readLine()) != null) {
             if (format != null && format.equals(FileFormat.CODE)) {
                 for (String tag : tags) {
-                    if (line.contains(tag + ":")) {
-                        int index = line.indexOf(tag + ":");
+                    String lowerCaseLine = line.toLowerCase();
+                    String lowerCaseTag = tag.toLowerCase();
+                    if (lowerCaseLine.contains(lowerCaseTag + ":")) {
+                        int index = lowerCaseLine.indexOf(lowerCaseTag + ":");
                         System.out.printf(
                             "add %s\n",
                             line.substring(index + tag.length() + 1).trim()

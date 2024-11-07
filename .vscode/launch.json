@@ -1,0 +1,39 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+
+        {
+            "type": "java",
+            "name": "Current File",
+            "request": "launch",
+            "mainClass": "${file}"
+        },
+        {
+            "type": "java",
+            "name": "CommandCLI with Add",
+            "request": "launch",
+            "mainClass": "cli.CommandCLI",
+            "args": "--add teste de add",
+            "projectName": "Todo"
+        },
+        {
+            "type": "java",
+            "name": "CommandCLI WEB",
+            "request": "launch",
+            "mainClass": "cli.CommandCLI",
+            "args": "-w",
+            "projectName": "Todo"
+        },
+        {
+            "type": "java",
+            "name": "CommandCLI from file",
+            "request": "launch",
+            "mainClass": "cli.CommandCLI",
+            "args": "-f src/main/java/cli/CommandCLI.java --file-format=CODE --file-tags=todo,fixit,fixme,idea",
+            "projectName": "Todo"
+        }
+    ]
+}

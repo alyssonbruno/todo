@@ -2,15 +2,18 @@ package cli;
 
 import domain.FileFormat;
 import domain.TaskStatus;
-import jakarta.inject.Inject;
 import java.io.File;
 import java.util.concurrent.Callable;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
+import org.springframework.stereotype.Component;
 import picocli.CommandLine;
 import picocli.CommandLine.ArgGroup;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
+import picocli.CommandLine.ParameterException;
 import picocli.CommandLine.Parameters;
+import picocli.CommandLine.ParseResult;
 import repl.CommandREPL;
 import service.CodeAnaliseService;
 import service.SystemService;
@@ -22,13 +25,14 @@ import web.TodoWebApplication;
  * @author Alysson
  * @version 2024-11
  */
+@Component
 @Command(
     name = "todo",
     mixinStandardHelpOptions = true,
     version = "2024-11",
     description = "A simple to-do task manager for cli and repl"
 )
-public class CommandCLI implements Callable<Integer> {
+public class CommandCLI {
 
     @Parameters(index = "0..*", hidden = true)
     String[] taskMessage;
@@ -130,13 +134,13 @@ public class CommandCLI implements Callable<Integer> {
         String tags = "todo";
     }
 
-    @Inject
+    @Autowired
     TaskService taskService;
 
-    @Inject
+    @Autowired
     SystemService systemService;
 
-    @Inject
+    @Autowired
     CodeAnaliseService codeAnaliseService;
 
     /*
@@ -155,7 +159,7 @@ public class CommandCLI implements Callable<Integer> {
         System.out.printf("Taks %d added!", id);
     }
 
-    @Override
+
     public Integer call() throws Exception {
         if (startWeb) {
             startWebApp();
@@ -207,14 +211,38 @@ public class CommandCLI implements Callable<Integer> {
                 System.out.println(op);
             }
         } else {
-            return (CommandREPL.terminal_repl());
+            return CommandREPL.terminal_repl();
         }
         return 0;
     }
 
+  
+    public static Integer callable(CommandCLI commandCLI ) {
+        try {
+            return commandCLI.call();
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 1;
+        }
+
+
+    }
+
     public static void main(String[] args) {
-        Integer exitCode;
-        exitCode = new CommandLine(new CommandCLI()).execute(args);
+        Integer exitCode = 0;
+        CommandCLI commandCLI = new CommandCLI();
+        ParseResult parseResult = new CommandLine(commandCLI).parseArgs(args);
+        try{
+            if (!CommandLine.printHelpIfRequested(parseResult)) {
+                exitCode = callable(commandCLI);
+            }
+        } catch (ParameterException ex) { // command line arguments could not be parsed
+            System.err.println(ex.getMessage());
+            ex.getCommandLine().usage(System.err);
+            exitCode = 2;
+        }
+
         System.exit(exitCode);
     }
 }
