@@ -17,7 +17,8 @@ public class Task {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String about;
+    private String title;
+    private String descrition;
     private TaskStatus status;
     private LocalDateTime startTime;
     private LocalDateTime completeTime;
@@ -35,14 +36,14 @@ public class Task {
      *  @author Alysson
      *  @version 2024.11
      */
-    public Task(Long id, String about) {
-        this.id = id;
-        this.about = about;
+    public Task(String title, String descrition) {
+        this.title = title;
+        this.descrition = descrition;
         status = TaskStatus.TODO;
     }
 
     public String toString() {
-        return id.toString() + " - " + this.about;
+        return id.toString() + " - " + this.title;
     }
 
     /** start working in this task
@@ -84,12 +85,20 @@ public class Task {
         completeTime = null;
     }
 
-    public void setAbout(String newAbout) {
-        about = newAbout;
+    public void setTitle(String newTitle) {
+        title = newTitle;
     }
 
-    public String getAbout() {
-        return about;
+    public void setDescripion(String newDescrition) {
+        descrition = newDescrition;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String geDescricao() {
+        return descrition;
     }
 
     public Long getId() {

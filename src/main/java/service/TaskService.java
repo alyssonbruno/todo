@@ -1,13 +1,23 @@
 package service;
 
+import domain.Task;
+import jakarta.inject.Inject;
 import org.springframework.stereotype.Service;
+import repository.TaskRepository;
 
 @Service
-class TaskService {
+public class TaskService {
 
-    public Integer add(String title, String descrition) {
-        Integer id = 0;
+    @Inject
+    TaskRepository taskRepository;
 
+    public Long add(String title, String descrition) {
+        Long id = taskRepository.save(new Task(title, descrition)).getId();
+        return id;
+    }
+
+    public Long add(String title) {
+        Long id = taskRepository.save(new Task(title, "")).getId();
         return id;
     }
 }

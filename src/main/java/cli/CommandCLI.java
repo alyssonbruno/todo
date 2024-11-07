@@ -4,6 +4,7 @@ import domain.FileFormat;
 import domain.TaskStatus;
 import java.io.File;
 import java.util.concurrent.Callable;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import picocli.CommandLine;
 import picocli.CommandLine.ArgGroup;
@@ -13,6 +14,7 @@ import picocli.CommandLine.Parameters;
 import repl.CommandREPL;
 import service.CodeAnaliseService;
 import service.SystemService;
+import service.TaskService;
 import web.TodoWebApplication;
 
 /**
@@ -128,12 +130,24 @@ public class CommandCLI implements Callable<Integer> {
         String tags = "todo";
     }
 
+    @Autowired
+    TaskService taskService;
+
     /*
         todo: how to make test?
         todo: implements save do file database
     */
     private void startWebApp() {
         SpringApplication.run(TodoWebApplication.class);
+    }
+
+    private void addTask(String taskDescrition, String[] taskMessage) {
+        TaskService taskService = new TaskService(); // fixit: why di is not working?
+        String descrition = taskMessage != null
+            ? taskDescrition + " " + String.join(" ", taskMessage)
+            : taskDescrition;
+        Long id = taskService.add(descrition);
+        System.out.printf("Taks %d added!", id);
     }
 
     @Override
@@ -175,8 +189,10 @@ public class CommandCLI implements Callable<Integer> {
                 throw new Exception("Invalid Operations");
             }
         } else if (op != null) {
-            if (
-                op.taskDescrition != null ||
+            if (op.taskDescrition != null) {
+                addTask(op.taskDescrition, taskMessage);
+                return 0;
+            } else if (
                 op.completeTaskId != null ||
                 op.deleteTaskId != null ||
                 op.statusToList != null ||

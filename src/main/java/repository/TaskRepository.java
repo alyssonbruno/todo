@@ -1,8 +1,10 @@
 package repository;
 
 import domain.Task;
+import domain.TaskStatus;
+import java.util.ArrayList;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
 
-@Repository
-public interface TaskRepository extends JpaRepository<Task, Long> {}
+public interface TaskRepository extends JpaRepository<Task, Long> {
+    public ArrayLis<Task> findByStatus(TaskStatus status);
+}
