@@ -6,5 +6,5 @@ import java.util.ArrayList;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface TaskRepository extends JpaRepository<Task, Long> {
-    public ArrayLis<Task> findByStatus(TaskStatus status);
+    public ArrayList<Task> findByStatus(TaskStatus status);
 }

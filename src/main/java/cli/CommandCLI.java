@@ -2,9 +2,9 @@ package cli;
 
 import domain.FileFormat;
 import domain.TaskStatus;
+import jakarta.inject.Inject;
 import java.io.File;
 import java.util.concurrent.Callable;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import picocli.CommandLine;
 import picocli.CommandLine.ArgGroup;
@@ -130,8 +130,14 @@ public class CommandCLI implements Callable<Integer> {
         String tags = "todo";
     }
 
-    @Autowired
+    @Inject
     TaskService taskService;
+
+    @Inject
+    SystemService systemService;
+
+    @Inject
+    CodeAnaliseService codeAnaliseService;
 
     /*
         todo: how to make test?
@@ -142,7 +148,6 @@ public class CommandCLI implements Callable<Integer> {
     }
 
     private void addTask(String taskDescrition, String[] taskMessage) {
-        TaskService taskService = new TaskService(); // fixit: why di is not working?
         String descrition = taskMessage != null
             ? taskDescrition + " " + String.join(" ", taskMessage)
             : taskDescrition;
@@ -159,8 +164,8 @@ public class CommandCLI implements Callable<Integer> {
 
         if (inputFile != null) {
             if (inputFile.isPipe) {
-                CodeAnaliseService.fromBufferedReader(
-                    SystemService.readFromFile(null),
+                codeAnaliseService.fromBufferedReader(
+                    systemService.readFromFile(null),
                     null,
                     null
                 );
@@ -169,16 +174,16 @@ public class CommandCLI implements Callable<Integer> {
                 inputFile.fileOperations.file != null
             ) {
                 if (inputFile.fileOperations.configFile != null) {
-                    CodeAnaliseService.fromBufferedReader(
-                        SystemService.readFromFile(
+                    codeAnaliseService.fromBufferedReader(
+                        systemService.readFromFile(
                             inputFile.fileOperations.file
                         ),
                         inputFile.fileOperations.configFile.format,
                         inputFile.fileOperations.configFile.tags.split(",")
                     );
                 } else {
-                    CodeAnaliseService.fromBufferedReader(
-                        SystemService.readFromFile(
+                    codeAnaliseService.fromBufferedReader(
+                        systemService.readFromFile(
                             inputFile.fileOperations.file
                         ),
                         FileFormat.TEXT,

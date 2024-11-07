@@ -17,7 +17,7 @@ public class SystemService {
      * @author Alysson
      * @version 2024-11
      */
-    public static BufferedReader readFromFile(File file) throws IOException {
+    public BufferedReader readFromFile(File file) throws IOException {
         BufferedReader pipeReader;
 
         if (file != null) {

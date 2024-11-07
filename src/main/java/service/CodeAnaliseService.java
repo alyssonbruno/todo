@@ -15,7 +15,7 @@ public class CodeAnaliseService {
      * @author Alysson
      * @version 2024-11
      */
-    public static void fromBufferedReader(
+    public void fromBufferedReader(
         BufferedReader reader,
         FileFormat format,
         String[] tags
