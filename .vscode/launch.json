@@ -34,6 +34,13 @@
             "mainClass": "cli.CommandCLI",
             "args": "-f src/main/java/cli/CommandCLI.java --file-format=CODE --file-tags=todo,fixit,fixme,idea",
             "projectName": "Todo"
+        },
+        {
+            "type": "java",
+            "name": "REPL",
+            "request": "launch",
+            "mainClass": "cli.CommandCLI",
+            "projectName": "Todo"
         }
     ]
 }

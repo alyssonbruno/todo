@@ -1,24 +1,17 @@
 package domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import java.time.LocalDateTime;
 
 /** class to Task
  *  @author Alysson
  *  @version 2024.11
  */
-@Entity
-public class Task {
+public class Task implements DataToFile {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String title;
-    private String descrition;
+    private String description;
     private TaskStatus status;
     private LocalDateTime startTime;
     private LocalDateTime completeTime;
@@ -30,15 +23,14 @@ public class Task {
         }
     }
 
-    protected Task() {}
-
     /** Create a new Task with TODO status
      *  @author Alysson
      *  @version 2024.11
      */
-    public Task(String title, String descrition) {
+    public Task(Long id, String title, String description) {
+        this.id = id;
         this.title = title;
-        this.descrition = descrition;
+        this.description = description;
         status = TaskStatus.TODO;
     }
 
@@ -90,7 +82,7 @@ public class Task {
     }
 
     public void setDescripion(String newDescrition) {
-        descrition = newDescrition;
+        description = newDescrition;
     }
 
     public String getTitle() {
@@ -98,7 +90,7 @@ public class Task {
     }
 
     public String geDescricao() {
-        return descrition;
+        return description;
     }
 
     public Long getId() {
@@ -115,5 +107,10 @@ public class Task {
 
     public LocalDateTime getCompleteTime() {
         return completeTime;
+    }
+
+    @Override
+    public String toLine() {
+        return id + ";" + title + ";" + description + ";" + startTime + ";" + completeTime + "/n";
     }
 }

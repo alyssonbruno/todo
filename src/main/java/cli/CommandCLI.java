@@ -1,12 +1,13 @@
 package cli;
 
+import java.io.File;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+
 import domain.FileFormat;
 import domain.TaskStatus;
-import java.io.File;
-import java.util.concurrent.Callable;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.SpringApplication;
-import org.springframework.stereotype.Component;
 import picocli.CommandLine;
 import picocli.CommandLine.ArgGroup;
 import picocli.CommandLine.Command;
@@ -25,7 +26,8 @@ import web.TodoWebApplication;
  * @author Alysson
  * @version 2024-11
  */
-@Component
+@Configuration
+@EnableJpaRepositories(basePackages = "repository")
 @Command(
     name = "todo",
     mixinStandardHelpOptions = true,
@@ -134,14 +136,12 @@ public class CommandCLI {
         String tags = "todo";
     }
 
-    @Autowired
-    TaskService taskService;
+    TaskService taskService = new TaskService();
 
-    @Autowired
-    SystemService systemService;
+    SystemService systemService = new SystemService();
 
-    @Autowired
-    CodeAnaliseService codeAnaliseService;
+    CodeAnaliseService codeAnaliseService = new CodeAnaliseService();
+
 
     /*
         todo: how to make test?
@@ -152,13 +152,9 @@ public class CommandCLI {
     }
 
     private void addTask(String taskDescrition, String[] taskMessage) {
-        String descrition = taskMessage != null
-            ? taskDescrition + " " + String.join(" ", taskMessage)
-            : taskDescrition;
-        Long id = taskService.add(descrition);
+        Long id = taskService.create(taskDescrition, taskMessage != null ? String.join(" ", taskMessage): "");
         System.out.printf("Taks %d added!", id);
     }
-
 
     public Integer call() throws Exception {
         if (startWeb) {
@@ -216,24 +212,20 @@ public class CommandCLI {
         return 0;
     }
 
-  
-    public static Integer callable(CommandCLI commandCLI ) {
+    public static Integer callable(CommandCLI commandCLI) {
         try {
             return commandCLI.call();
-            
         } catch (Exception e) {
             e.printStackTrace();
             return 1;
         }
-
-
     }
 
     public static void main(String[] args) {
         Integer exitCode = 0;
         CommandCLI commandCLI = new CommandCLI();
         ParseResult parseResult = new CommandLine(commandCLI).parseArgs(args);
-        try{
+        try {
             if (!CommandLine.printHelpIfRequested(parseResult)) {
                 exitCode = callable(commandCLI);
             }
