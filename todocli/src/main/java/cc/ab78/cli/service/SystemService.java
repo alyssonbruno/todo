@@ -1,13 +1,11 @@
-package service;
+package cc.ab78.cli.service;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.file.Files;
-import org.springframework.stereotype.Service;
 
-@Service
 public class SystemService {
 
     /** Receive a stream of information from PIPE then add one taks

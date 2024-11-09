@@ -1,11 +1,9 @@
-package service;
+package cc.ab78.cli.service;
 
-import domain.FileFormat;
+import cc.ab78.cli.domain.FileFormat;
 import java.io.BufferedReader;
 import java.io.IOException;
-import org.springframework.stereotype.Service;
 
-@Service
 public class CodeAnaliseService {
 
     /** Receive a stream of information from PIPE then add one taks

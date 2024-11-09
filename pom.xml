@@ -2,118 +2,54 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.3.5</version>
-        <relativePath/>
-    </parent>
+
     <groupId>cc.ab78.todo</groupId>
-    <artifactId>Todo</artifactId>
+    <artifactId>cc-ab78-todo</artifactId>
     <version>0.0.1-SNAPSHOT</version>
+    <packaging>pom</packaging>
     <name>A Simple To-Do Application</name>
-    <description>A simple to-do application. Works in a terminal cli, as a REPL and as a webservice.</description>
 
     <properties>
         <java.version>21</java.version>
     </properties>
 
-    <dependencies>
-        <dependency> <!-- web -->
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
+    <modules>
+        <module>todocli</module>
+        <module>todoweb</module>
+    </modules>
 
-        <dependency> <!-- REPL -->
-            <groupId>org.jline</groupId>
-            <artifactId>jline</artifactId>
-            <version>3.27.1</version>
-        </dependency>
-
-        <dependency> <!-- Command Line -->
-          <groupId>info.picocli</groupId>
-          <artifactId>picocli</artifactId>
-          <version>4.7.6</version>
-        </dependency>
-
-        <!-- Spring Data - Database access -->
-        <dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-data-jpa</artifactId>
-		</dependency>
-        <!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>8.0.33</version>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/com.h2database/h2 -->
-        <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-            <version>2.3.232</version>
-        </dependency>
-
-        <!-- Dependency Injection alternative -->
-        <dependency>
-           	<groupId>jakarta.inject</groupId>
-           	<artifactId>jakarta.inject-api</artifactId>
-           	<version>2.0.0</version>
-        </dependency>
-
-
-        <!-- For testing -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>cc.ab78.todo</groupId>
+                <artifactId>todoweb</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>cc.ab78.todo</groupId>
+                <artifactId>todocli</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <build>
         <plugins>
-            <!-- Web interface -->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>2.6.0</version>
+                <configuration>
+                     <mainClass>cc.ab78.todo.todocli.CommandCLI</mainClass>
+                 </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
-
-            <!-- REPL interface  -->
-            <plugin>
-               <groupId>org.codehaus.mojo</groupId>
-               <artifactId>exec-maven-plugin</artifactId>
-               <version>3.5.0</version>
-               <executions>
-                   <execution>
-                       <goals>
-                           <goal>java</goal>
-                       </goals>
-                   </execution>
-               </executions>
-               <configuration>
-                   <mainClass>cli.CommandCLI</mainClass>
-               </configuration>
-           </plugin>
-
-           <!-- Command line Interface -->
-           <plugin>
-             <groupId>org.apache.maven.plugins</groupId>
-             <artifactId>maven-compiler-plugin</artifactId>
-             <!-- annotationProcessorPaths requires maven-compiler-plugin version 3.5 or higher -->
-             <version>3.13.0</version>
-             <configuration>
-               <annotationProcessorPaths>
-                 <path>
-                   <groupId>info.picocli</groupId>
-                   <artifactId>picocli-codegen</artifactId>
-                   <version>4.7.6</version>
-                 </path>
-               </annotationProcessorPaths>
-               <compilerArgs>
-                 <arg>-Aproject=${project.groupId}/${project.artifactId}</arg>
-               </compilerArgs>
-             </configuration>
-           </plugin>
         </plugins>
     </build>
 </project>

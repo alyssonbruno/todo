@@ -1,0 +1,79 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>cc.ab78.todo</groupId>
+        <artifactId>cc-ab78-todo</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+    </parent>
+    <groupId>cc.ab78.todo</groupId>
+    <artifactId>todocli</artifactId>
+    <version>${project.version}</version>
+    <name>A Simple To-Do Application</name>
+    <description>A simple to-do application. Works in a terminal cli, as a REPL and as a webservice.</description>
+
+    <properties>
+        <java.version>21</java.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>cc.ab78.todo</groupId>
+            <artifactId>todoweb</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency> <!-- REPL -->
+            <groupId>org.jline</groupId>
+            <artifactId>jline</artifactId>
+            <version>3.27.1</version>
+        </dependency>
+
+        <dependency> <!-- Command Line -->
+          <groupId>info.picocli</groupId>
+          <artifactId>picocli</artifactId>
+          <version>4.7.6</version>
+        </dependency>
+    </dependencies>
+    <build>
+        <plugins>
+            <!-- REPL interface  -->
+            <plugin>
+               <groupId>org.codehaus.mojo</groupId>
+               <artifactId>exec-maven-plugin</artifactId>
+               <version>3.5.0</version>
+               <executions>
+                   <execution>
+                       <goals>
+                           <goal>java</goal>
+                       </goals>
+                   </execution>
+               </executions>
+               <configuration>
+                   <mainClass>cc.ab78.cli.CommandCLI</mainClass>
+               </configuration>
+           </plugin>
+
+           <!-- Command line Interface -->
+           <plugin>
+             <groupId>org.apache.maven.plugins</groupId>
+             <artifactId>maven-compiler-plugin</artifactId>
+             <!-- annotationProcessorPaths requires maven-compiler-plugin version 3.5 or higher -->
+             <version>3.13.0</version>
+             <configuration>
+               <annotationProcessorPaths>
+                 <path>
+                   <groupId>info.picocli</groupId>
+                   <artifactId>picocli-codegen</artifactId>
+                   <version>4.7.6</version>
+                 </path>
+               </annotationProcessorPaths>
+               <compilerArgs>
+                 <arg>-Aproject=${project.groupId}/${project.artifactId}</arg>
+               </compilerArgs>
+             </configuration>
+           </plugin>
+        </plugins>
+    </build>
+</project>

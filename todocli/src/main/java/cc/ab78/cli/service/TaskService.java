@@ -1,16 +1,14 @@
-package service;
+package cc.ab78.cli.service;
 
+import cc.ab78.cli.domain.Task;
 import java.util.ArrayList;
 import java.util.Calendar;
-
-import domain.Task;
-
 
 public class TaskService {
 
     ArrayList<Task> todoTasks;
 
-    public TaskService(){
+    public TaskService() {
         todoTasks = new ArrayList<>();
     }
 
@@ -28,5 +26,4 @@ public class TaskService {
         FileService fileService = new FileService(".task.todo");
         fileService.saveToFile(todoTasks);
     }
-
 }

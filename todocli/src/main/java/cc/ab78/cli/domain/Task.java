@@ -1,4 +1,4 @@
-package domain;
+package cc.ab78.cli.domain;
 
 import java.time.LocalDateTime;
 
@@ -111,6 +111,17 @@ public class Task implements DataToFile {
 
     @Override
     public String toLine() {
-        return id + ";" + title + ";" + description + ";" + startTime + ";" + completeTime + "/n";
+        return (
+            id +
+            ";" +
+            title +
+            ";" +
+            description +
+            ";" +
+            startTime +
+            ";" +
+            completeTime +
+            "/n"
+        );
     }
 }

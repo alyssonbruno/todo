@@ -1,13 +1,13 @@
-package cli;
+package cc.ab78.cli;
 
+import cc.ab78.cli.domain.FileFormat;
+import cc.ab78.cli.domain.TaskStatus;
+import cc.ab78.cli.repl.CommandREPL;
+import cc.ab78.cli.service.CodeAnaliseService;
+import cc.ab78.cli.service.SystemService;
+import cc.ab78.cli.service.TaskService;
+import cc.ab78.web.TodoWebApplication;
 import java.io.File;
-
-import org.springframework.boot.SpringApplication;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-
-import domain.FileFormat;
-import domain.TaskStatus;
 import picocli.CommandLine;
 import picocli.CommandLine.ArgGroup;
 import picocli.CommandLine.Command;
@@ -15,19 +15,12 @@ import picocli.CommandLine.Option;
 import picocli.CommandLine.ParameterException;
 import picocli.CommandLine.Parameters;
 import picocli.CommandLine.ParseResult;
-import repl.CommandREPL;
-import service.CodeAnaliseService;
-import service.SystemService;
-import service.TaskService;
-import web.TodoWebApplication;
 
 /**
  * Command is the main Class to terminal. This can call {@link repl.CommandREPL} when called without arguments.
  * @author Alysson
  * @version 2024-11
  */
-@Configuration
-@EnableJpaRepositories(basePackages = "repository")
 @Command(
     name = "todo",
     mixinStandardHelpOptions = true,
@@ -142,17 +135,19 @@ public class CommandCLI {
 
     CodeAnaliseService codeAnaliseService = new CodeAnaliseService();
 
-
     /*
         todo: how to make test?
         todo: implements save do file database
     */
     private void startWebApp() {
-        SpringApplication.run(TodoWebApplication.class);
+        TodoWebApplication.start();
     }
 
     private void addTask(String taskDescrition, String[] taskMessage) {
-        Long id = taskService.create(taskDescrition, taskMessage != null ? String.join(" ", taskMessage): "");
+        Long id = taskService.create(
+            taskDescrition,
+            taskMessage != null ? String.join(" ", taskMessage) : ""
+        );
         System.out.printf("Taks %d added!", id);
     }
 

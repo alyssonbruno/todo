@@ -44,3 +44,14 @@ Set this one for all system:
 ```bash
 asdf global maven 3.9.9
 ```
+### Compile and Install
+
+```
+mvn compile install
+```
+
+### Run
+
+```
+java -jar target\Todo*.jar --help
+```

@@ -1,4 +1,4 @@
-package domain;
+package cc.ab78.cli.domain;
 
 public enum TaskStatus {
     TODO,
