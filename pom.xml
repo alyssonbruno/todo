@@ -16,6 +16,7 @@
     <modules>
         <module>todocli</module>
         <module>todoweb</module>
+        <module>assembly</module>
     </modules>
 
     <dependencyManagement>
@@ -40,7 +41,7 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <version>2.6.0</version>
                 <configuration>
-                     <mainClass>cc.ab78.todo.todocli.CommandCLI</mainClass>
+                     <mainClass>cc.ab78.cli.CommandCLI</mainClass>
                  </configuration>
                 <executions>
                     <execution>

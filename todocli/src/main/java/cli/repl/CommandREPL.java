@@ -1,6 +1,7 @@
-package cc.ab78.cli.repl;
+package cli.repl;
 
 import java.util.Arrays;
+
 import org.jline.reader.LineReader;
 import org.jline.reader.LineReaderBuilder;
 import org.jline.terminal.Terminal;

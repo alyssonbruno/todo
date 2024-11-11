@@ -1,4 +1,4 @@
-package cc.ab78.cli.domain;
+package cli.domain;
 
 import java.time.LocalDateTime;
 

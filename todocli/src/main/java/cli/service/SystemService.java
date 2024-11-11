@@ -1,4 +1,4 @@
-package cc.ab78.cli.service;
+package cli.service;
 
 import java.io.BufferedReader;
 import java.io.File;

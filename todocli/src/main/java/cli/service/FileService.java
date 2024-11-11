@@ -1,6 +1,5 @@
-package cc.ab78.cli.service;
+package cli.service;
 
-import cc.ab78.cli.domain.DataToFile;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileReader;
@@ -9,6 +8,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
+
+import cli.domain.DataToFile;
 
 public class FileService {
 

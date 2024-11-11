@@ -1,4 +1,4 @@
-package cc.ab78.cli.domain;
+package cli.domain;
 
 public interface DataToFile {
     public String toLine();

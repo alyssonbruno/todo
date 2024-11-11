@@ -9,10 +9,11 @@
     </parent>
     <groupId>cc.ab78.todo</groupId>
     <artifactId>todoweb</artifactId>
-    <version>${project.version}</version>
+    <version>${project.parent.version}</version>
     <name>A Simple To-Do Application</name>
     <description>Web application.</description>
-
+    <packaging>jar</packaging>
+    
     <properties>
         <java.version>21</java.version>
     </properties>
