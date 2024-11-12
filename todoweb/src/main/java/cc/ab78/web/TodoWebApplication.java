@@ -10,5 +10,14 @@ public class TodoWebApplication {
 
     public static void start() {
         SpringApplication.run(TodoWebApplication.class);
+        // Impede que a thread principal termine
+        try {
+            Thread.currentThread().join();
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+    }
+    public static void main(String[] args) {
+        SpringApplication.run(TodoWebApplication.class, args);
     }
 }

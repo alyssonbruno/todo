@@ -1,8 +1,8 @@
 package cli;
 
-// import cc.ab78.web.TodoWebApplication;
 import java.io.File;
 
+import cc.ab78.web.TodoWebApplication;
 import cli.domain.FileFormat;
 import cli.domain.TaskStatus;
 import cli.repl.CommandREPL;
@@ -141,7 +141,7 @@ public class CommandCLI {
         todo: implements save do file database
     */
     private void startWebApp() {
-        // TodoWebApplication.start();
+        TodoWebApplication.start();
     }
 
     private void addTask(String taskDescrition, String[] taskMessage) {
