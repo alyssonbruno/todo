@@ -16,7 +16,6 @@
     <modules>
         <module>todocli</module>
         <module>todoweb</module>
-        <module>assembly</module>
     </modules>
 
     <dependencyManagement>
@@ -34,7 +33,7 @@
         </dependencies>
     </dependencyManagement>
 
-    <build>
+    <!--build>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
@@ -52,5 +51,5 @@
                 </executions>
             </plugin>
         </plugins>
-    </build>
+    </build-->
 </project>
