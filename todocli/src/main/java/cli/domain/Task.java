@@ -121,7 +121,7 @@ public class Task implements DataToFile {
             startTime +
             ";" +
             completeTime +
-            "/n"
+            "\n"
         );
     }
 }

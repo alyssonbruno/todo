@@ -29,7 +29,7 @@
             "type": "java",
             "name": "CommandCLI WEB",
             "request": "launch",
-            "mainClass": "cc.ab78.cli.CommandCLI",
+            "mainClass": "cli.CommandCLI",
             "args": "-w",
             "projectName": "Todo"
         },

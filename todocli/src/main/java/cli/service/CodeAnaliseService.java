@@ -19,6 +19,7 @@ public class CodeAnaliseService {
         FileFormat format,
         String[] tags
     ) throws IOException {
+        TaskService taskService = new TaskService();
         String line;
         while ((line = reader.readLine()) != null) {
             if (format != null && format.equals(FileFormat.CODE)) {
@@ -27,15 +28,13 @@ public class CodeAnaliseService {
                     String lowerCaseTag = tag.toLowerCase();
                     if (lowerCaseLine.contains(lowerCaseTag + ":")) {
                         int index = lowerCaseLine.indexOf(lowerCaseTag + ":");
-                        System.out.printf(
-                            "add %s\n",
-                            line.substring(index + tag.length() + 1).trim()
-                        );
+                        taskService.create(line.substring(index + tag.length() + 1).trim(), "");
                     }
                 }
             } else {
-                System.out.printf("add %s\n", line);
+                taskService.create(line.trim(), "");
             }
         }
+        taskService.save();
     }
 }

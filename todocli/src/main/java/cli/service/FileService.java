@@ -19,7 +19,7 @@ public class FileService {
         this.filename = filename;
     }
 
-    public <T extends DataToFile> void saveToFile(List<T> datas) {
+    public <T extends DataToFile> void saveToFile(List<T> datas) { //fix: está apagando o conteudo do arquivo
         try (
             BufferedWriter writer = new BufferedWriter(
                 new FileWriter(this.filename)

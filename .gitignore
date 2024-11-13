@@ -4,3 +4,4 @@ target/
 .settings/
 .factorypath
 .idea
+.task.todo
