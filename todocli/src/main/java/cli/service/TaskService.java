@@ -32,6 +32,7 @@ public class TaskService {
 
     public void load(Long id, String title, String description, LocalDateTime startTime, LocalDateTime CompleteTime){
         Task task = new Task(id, title, description, startTime, CompleteTime);
+        //the status is calculated from startTime and CompleteTime
         switch (task.getStatus()) {
             case DONE:
                 doneTasks.add(task);
@@ -74,8 +75,16 @@ public class TaskService {
         return changeStatus(id, todoTasks, doingTasks);
     }
 
+    public Boolean start(Task task){
+        return changeStatus(task, todoTasks, doingTasks);
+    }
+
     public Boolean complete(Long id){
         return changeStatus(id, doingTasks, doneTasks);
+    }
+
+    public Boolean complete(Task task){
+        return changeStatus(task, doingTasks, doneTasks);
     }
 
     public void save() {
