@@ -27,6 +27,10 @@ public class Task implements DataToFile {
      *  @author Alysson
      *  @version 2024.11
      */
+    public Task(Long id){
+        this.id = id;
+    }
+
     public Task(Long id, String title, String description) {
         this.id = id;
         this.title = title;
@@ -142,5 +146,13 @@ public class Task implements DataToFile {
             completeTime +
             "\n"
         );
+    }
+
+    @Override
+    public boolean equals(Object other){
+        if(other instanceof Task){
+            return this.id == ((Task)other).id;
+        }
+        return false;
     }
 }
