@@ -34,6 +34,25 @@ public class Task implements DataToFile {
         status = TaskStatus.TODO;
     }
 
+    public Task(Long id, String title, String description, LocalDateTime startTime, LocalDateTime completeTime) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.startTime = startTime;
+        this.completeTime = completeTime;
+        if(startTime != null){
+            if(completeTime != null){
+                this.status = TaskStatus.DONE;
+            }
+            else {
+                this.status = TaskStatus.DOING;
+            }
+        }
+        else {
+            this.status = TaskStatus.TODO;
+        }
+    }
+
     public String toString() {
         return id.toString() + " - " + this.title;
     }
