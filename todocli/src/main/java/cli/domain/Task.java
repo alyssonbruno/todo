@@ -35,6 +35,8 @@ public class Task implements DataToFile {
         this.id = id;
         this.title = title;
         this.description = description;
+        startTime = null;
+        completeTime = null;
         status = TaskStatus.TODO;
     }
 
@@ -134,17 +136,12 @@ public class Task implements DataToFile {
 
     @Override
     public String toLine() {
-        return (
-            id +
-            ";" +
-            title +
-            ";" +
-            description +
-            ";" +
-            startTime +
-            ";" +
-            completeTime +
-            "\n"
+        return String.format("%d;%s;%s;%s;%s;\n",
+            id,
+            title,
+            description,
+            startTime == null ? "" : startTime.toString(),
+            completeTime == null ? "": completeTime.toString()
         );
     }
 
