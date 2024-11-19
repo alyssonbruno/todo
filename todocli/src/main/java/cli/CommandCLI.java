@@ -18,7 +18,7 @@ import picocli.CommandLine.Parameters;
 import picocli.CommandLine.ParseResult;
 
 /**
- * Command is the main Class to terminal. This can call {@link repl.CommandREPL} when called without arguments.
+ * Command is the main Class to terminal. This can call {@link cli.repl.CommandREPL} when called without arguments.
  * @author Alysson
  * @version 2024-11
  */
