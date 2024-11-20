@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 
 import cli.domain.Task;
 import cli.domain.Task.WrongStatus;
-import cli.domain.TaskStatus.*;
+import cli.domain.TaskStatus;
 
 public class TaskService {
 
@@ -85,6 +85,19 @@ public class TaskService {
 
     public Boolean complete(Task task){
         return changeStatus(task, doingTasks, doneTasks);
+    }
+
+    public ArrayList<Task>
+    list(TaskStatus status){
+        switch (status){
+            case TODO:
+                return todoTasks;
+            case DONE:
+                return doneTasks;
+            default:
+                break;
+        }
+        return null;
     }
 
     public void save() {

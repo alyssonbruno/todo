@@ -5,6 +5,7 @@ import java.io.File;
 import cc.ab78.web.TodoWebApplication;
 import cli.domain.FileFormat;
 import cli.domain.TaskStatus;
+import cli.domain.Task;
 import cli.repl.CommandREPL;
 import cli.service.CodeAnaliseService;
 import cli.service.SystemService;
@@ -152,6 +153,14 @@ public class CommandCLI {
         System.out.printf("Taks %d added!", id);
     }
 
+    private void listTask(TaskStatus status){
+        if(status!=null){
+            for (Task t : taskService.list(status) ){
+                System.out.printf("%d - %s", t.getId(), t.getTitle());
+            }
+        }
+    }
+
     public Integer call() throws Exception {
         if (startWeb) {
             startWebApp();
@@ -193,10 +202,11 @@ public class CommandCLI {
             if (op.taskDescrition != null) {
                 addTask(op.taskDescrition, taskMessage);
                 return 0;
-            } else if (
-                op.completeTaskId != null ||
+            } else if (op.statusToList != null ){
+                listTask(op.statusToList);
+            } else if(
+                    op.completeTaskId != null ||
                 op.deleteTaskId != null ||
-                op.statusToList != null ||
                 op.startTaskId != null
             ) {
                 System.out.println(String.join(" ", taskMessage));
