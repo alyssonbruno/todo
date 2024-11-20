@@ -1,12 +1,11 @@
 package cli.service;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.time.LocalDateTime;
-
 import cli.domain.Task;
 import cli.domain.Task.WrongStatus;
 import cli.domain.TaskStatus;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Calendar;
 
 public class TaskService {
 
@@ -30,7 +29,13 @@ public class TaskService {
         return task.getId();
     }
 
-    public void load(Long id, String title, String description, LocalDateTime startTime, LocalDateTime CompleteTime){
+    public void load(
+        Long id,
+        String title,
+        String description,
+        LocalDateTime startTime,
+        LocalDateTime CompleteTime
+    ) {
         Task task = new Task(id, title, description, startTime, CompleteTime);
         //the status is calculated from startTime and CompleteTime
         switch (task.getStatus()) {
@@ -43,21 +48,22 @@ public class TaskService {
             case DELETED:
                 break;
             default:
-                todoTasks.add(task);        
+                todoTasks.add(task);
         }
     }
 
-    private Boolean changeStatus(Task t, ArrayList<Task> from, ArrayList<Task> to){
-        if(from.contains(t)){
+    private Boolean changeStatus(
+        Task t,
+        ArrayList<Task> from,
+        ArrayList<Task> to
+    ) {
+        if (from.contains(t)) {
             try {
                 Task task = from.remove(from.indexOf(t));
-                if(from.equals(todoTasks))
-                    task.start();
-                else if (from.equals(doingTasks))
-                    task.complete();
+                if (from.equals(todoTasks)) task.start();
+                else if (from.equals(doingTasks)) task.complete();
                 return to.add(task);
-            }
-            catch(WrongStatus e){
+            } catch (WrongStatus e) {
                 e.printStackTrace();
                 return false;
             }
@@ -65,31 +71,33 @@ public class TaskService {
         return false;
     }
 
-    private Boolean changeStatus(Long id, ArrayList<Task> from, ArrayList<Task> to){
+    private Boolean changeStatus(
+        Long id,
+        ArrayList<Task> from,
+        ArrayList<Task> to
+    ) {
         Task t = new Task(id);
         return changeStatus(t, from, to);
     }
 
-
-    public Boolean start(Long id){
+    public Boolean start(Long id) {
         return changeStatus(id, todoTasks, doingTasks);
     }
 
-    public Boolean start(Task task){
+    public Boolean start(Task task) {
         return changeStatus(task, todoTasks, doingTasks);
     }
 
-    public Boolean complete(Long id){
+    public Boolean complete(Long id) {
         return changeStatus(id, doingTasks, doneTasks);
     }
 
-    public Boolean complete(Task task){
+    public Boolean complete(Task task) {
         return changeStatus(task, doingTasks, doneTasks);
     }
 
-    public ArrayList<Task>
-    list(TaskStatus status){
-        switch (status){
+    public ArrayList<Task> list(TaskStatus status) {
+        switch (status) {
             case TODO:
                 return todoTasks;
             case DONE:
@@ -98,6 +106,31 @@ public class TaskService {
                 break;
         }
         return null;
+    }
+
+    private TaskStatus stringToTaskStatus(String s) {
+        switch (s.toUpperCase()) {
+            case "TODO":
+                return TaskStatus.TODO;
+            case "DOING":
+                return TaskStatus.DOING;
+            case "DONE":
+                return TaskStatus.DONE;
+            case "DELETED":
+                return TaskStatus.DELETED;
+        }
+        return null;
+    }
+
+    public ArrayList<String> list(String status) {
+        ArrayList<String> ret = new ArrayList<>();
+        TaskStatus taskStatus = stringToTaskStatus(status);
+        for (Task t : list(taskStatus)) {
+            ret.add(
+                String.format("%d - %s - %s", t.getId(), t.getTitle(), status)
+            );
+        }
+        return ret;
     }
 
     public void save() {

@@ -1,7 +1,7 @@
 package cli.repl;
 
+import cli.service.TaskService;
 import java.util.Arrays;
-
 import org.jline.reader.LineReader;
 import org.jline.reader.LineReaderBuilder;
 import org.jline.terminal.Terminal;
@@ -10,6 +10,8 @@ import org.jline.terminal.TerminalBuilder;
 public class CommandREPL {
 
     public static Integer terminal_repl() {
+        TaskService taskService;
+        taskService = new TaskService();
         try {
             Terminal terminal = TerminalBuilder.builder().system(true).build();
             LineReader lineReader = LineReaderBuilder.builder()
@@ -46,7 +48,7 @@ public class CommandREPL {
                         terminal
                             .writer()
                             .println(
-                                "complete [task_id[] - mark the task (with task_id) as done. If isn´t task_id apply to all task in doing status."
+                                "complete [task_id] - mark the task (with task_id) as done. If isn´t task_id apply to all task in doing status."
                             );
                         terminal
                             .writer()
@@ -70,7 +72,9 @@ public class CommandREPL {
                         terminal.writer().println(othersStrings);
                         break;
                     case "list":
-                        terminal.writer().println(othersStrings);
+                        for (String task : taskService.list(othersStrings)) {
+                            terminal.writer().println(task);
+                        }
                         break;
                     case "complete":
                         terminal.writer().println(othersStrings);
@@ -82,7 +86,6 @@ public class CommandREPL {
                     case "quit":
                         repl = false;
                         terminal.writer().println("Goodbye!");
-
                         break;
                 }
                 terminal.writer().flush();
