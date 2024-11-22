@@ -17,6 +17,7 @@ public class TaskService {
         todoTasks = new ArrayList<>();
         doingTasks = new ArrayList<>();
         doneTasks = new ArrayList<>();
+        load();
     }
 
     public Long getNextId() {
@@ -102,6 +103,8 @@ public class TaskService {
                 return todoTasks;
             case DONE:
                 return doneTasks;
+            case DOING:
+                return doingTasks;
             default:
                 break;
         }
@@ -131,6 +134,28 @@ public class TaskService {
             );
         }
         return ret;
+    }
+
+    public static Task converter(String line) {
+        String[] taskLine = line.split(";");
+        return new Task(
+            Long.parseLong(taskLine[0]),
+            taskLine[1],
+            taskLine[2],
+            taskLine[3].equals("null")
+                ? null
+                : LocalDateTime.parse(taskLine[3]),
+            taskLine[4].equals("null") ? null : LocalDateTime.parse(taskLine[4])
+        );
+    }
+
+    public void load() {
+        FileService todoFileService = new FileService(".task.todo");
+        FileService doneFileService = new FileService(".task.done");
+        FileService doingFileServce = new FileService(".task.doing");
+        todoTasks.addAll(todoFileService.readFromFile(TaskService::converter));
+        doneTasks.addAll(doneFileService.readFromFile(TaskService::converter));
+        doingTasks.addAll(doingFileServce.readFromFile(TaskService::converter));
     }
 
     public void save() {

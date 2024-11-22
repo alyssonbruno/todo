@@ -27,7 +27,7 @@ public class Task implements DataToFile {
      *  @author Alysson
      *  @version 2024.11
      */
-    public Task(Long id){
+    public Task(Long id) {
         this.id = id;
     }
 
@@ -40,21 +40,25 @@ public class Task implements DataToFile {
         status = TaskStatus.TODO;
     }
 
-    public Task(Long id, String title, String description, LocalDateTime startTime, LocalDateTime completeTime) {
+    public Task(
+        Long id,
+        String title,
+        String description,
+        LocalDateTime startTime,
+        LocalDateTime completeTime
+    ) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.startTime = startTime;
         this.completeTime = completeTime;
-        if(startTime != null){
-            if(completeTime != null){
+        if (startTime != null) {
+            if (completeTime != null) {
                 this.status = TaskStatus.DONE;
-            }
-            else {
+            } else {
                 this.status = TaskStatus.DOING;
             }
-        }
-        else {
+        } else {
             this.status = TaskStatus.TODO;
         }
     }
@@ -136,19 +140,20 @@ public class Task implements DataToFile {
 
     @Override
     public String toLine() {
-        return String.format("%d;%s;%s;%s;%s;\n",
+        return String.format(
+            "%d;%s;%s;%s;%s\n",
             id,
             title,
             description,
-            startTime == null ? "" : startTime.toString(),
-            completeTime == null ? "": completeTime.toString()
+            startTime.equals(null) ? "" : startTime.toString(),
+            completeTime.equals(null) ? "" : completeTime.toString()
         );
     }
 
     @Override
-    public boolean equals(Object other){
-        if(other instanceof Task){
-            return this.id == ((Task)other).id;
+    public boolean equals(Object other) {
+        if (other instanceof Task) {
+            return this.id == ((Task) other).id;
         }
         return false;
     }
